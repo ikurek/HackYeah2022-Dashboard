@@ -19,7 +19,6 @@ class ProfileCard extends StatelessWidget {
       ),
       decoration: BoxDecoration(
         color: secondaryColor,
-        borderRadius: const BorderRadius.all(Radius.circular(10)),
         border: Border.all(color: Colors.white10),
       ),
       child: Row(
@@ -32,7 +31,7 @@ class ProfileCard extends StatelessWidget {
             Padding(
               padding:
               const EdgeInsets.symmetric(horizontal: defaultPadding / 2),
-              child: Text("Angelina Jolie"),
+              child: Text("Angelina Jolie", style: defaultTextStyle),
             ),
           Icon(Icons.keyboard_arrow_down),
         ],

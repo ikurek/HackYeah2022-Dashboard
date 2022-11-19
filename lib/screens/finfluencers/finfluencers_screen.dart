@@ -65,6 +65,7 @@ class _FinfluencersScreenState extends State<FinfluencersScreen> {
         if (!Responsive.isDesktop(context))
           IconButton(
             icon: Icon(Icons.menu),
+            color: textColor,
             onPressed: context.read<MenuController>().controlMenu,
           ),
         if (!Responsive.isMobile(context))
@@ -74,7 +75,7 @@ class _FinfluencersScreenState extends State<FinfluencersScreen> {
           ),
         if (!Responsive.isMobile(context))
           Spacer(flex: Responsive.isDesktop(context) ? 2 : 1),
-        Expanded(child: SearchField()),
+        Expanded(child: SizedBox()),
         ProfileCard()
       ],
     );

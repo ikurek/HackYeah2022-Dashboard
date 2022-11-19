@@ -32,13 +32,13 @@ class RecentFiles extends StatelessWidget {
               minWidth: 600,
               columns: [
                 DataColumn(
-                  label: Text("File Name"),
+                  label: Text("File Name", style: defaultTextStyle),
                 ),
                 DataColumn(
-                  label: Text("Date"),
+                  label: Text("Date", style: defaultTextStyle),
                 ),
                 DataColumn(
-                  label: Text("Size"),
+                  label: Text("Size", style: defaultTextStyle),
                 ),
               ],
               rows: List.generate(
@@ -66,13 +66,13 @@ DataRow recentFileDataRow(RecentFile fileInfo) {
             ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: defaultPadding),
-              child: Text(fileInfo.title!),
+              child: Text(fileInfo.title!, style: defaultTextStyle),
             ),
           ],
         ),
       ),
-      DataCell(Text(fileInfo.date!)),
-      DataCell(Text(fileInfo.size!)),
+      DataCell(Text(fileInfo.date!, style: defaultTextStyle)),
+      DataCell(Text(fileInfo.size!, style: defaultTextStyle)),
     ],
   );
 }

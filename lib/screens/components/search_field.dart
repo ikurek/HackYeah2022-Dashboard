@@ -4,9 +4,11 @@ import 'package:flutter_svg/svg.dart';
 import '../../../constants.dart';
 
 class SearchField extends StatelessWidget {
-  const SearchField({
-    Key? key,
-  }) : super(key: key);
+  final ValueChanged<String> _valueChanged;
+
+  SearchField(
+    this._valueChanged,
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -32,6 +34,9 @@ class SearchField extends StatelessWidget {
           ),
         ),
       ),
+      onChanged: (value) {
+        _valueChanged.call(value);
+      },
     );
   }
 }

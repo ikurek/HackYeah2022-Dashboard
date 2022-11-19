@@ -24,7 +24,7 @@ class _MainScreenState extends State<MainScreen> {
         setState(() {
           _selectedPage = value;
         });
-      }),
+      }, _selectedPage),
       body: SafeArea(
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -38,7 +38,7 @@ class _MainScreenState extends State<MainScreen> {
                   setState(() {
                     _selectedPage = value;
                   });
-                }),
+                }, _selectedPage),
               ),
             Expanded(
               // It takes 5/6 part of the screen
