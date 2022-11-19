@@ -11,12 +11,12 @@ import '../components/storage_details.dart';
 import 'package:provider/provider.dart';
 
 
-class DashboardScreen extends StatefulWidget {
+class MetricsScreen extends StatefulWidget {
   @override
-  State<StatefulWidget> createState() => _DashboardScreenState();
+  State<StatefulWidget> createState() => _MetricsScreenState();
 }
 
-class _DashboardScreenState extends State<DashboardScreen> {
+class _MetricsScreenState extends State<MetricsScreen> {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -69,7 +69,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
           ),
         if (!Responsive.isMobile(context))
           Text(
-            "Dashboard",
+            "Metrics",
             style: Theme.of(context).textTheme.headline6,
           ),
         if (!Responsive.isMobile(context))

@@ -1,10 +1,13 @@
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class SideMenu extends StatelessWidget {
-  const SideMenu({
-    Key? key,
-  }) : super(key: key);
+  final ValueChanged<int> _pageChanged;
+
+  SideMenu(
+    this._pageChanged,
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -17,43 +20,18 @@ class SideMenu extends StatelessWidget {
           DrawerListTile(
             title: "Dashboard",
             svgSrc: "assets/icons/menu_dashbord.svg",
-            press: () {},
+            press: () { _pageChanged.call(0); },
           ),
           DrawerListTile(
-            title: "Transaction",
+            title: "Finfluencerzy",
             svgSrc: "assets/icons/menu_tran.svg",
-            press: () {},
+            press: () { _pageChanged.call(1); },
           ),
           DrawerListTile(
-            title: "Task",
+            title: "Glabalne metryki",
             svgSrc: "assets/icons/menu_task.svg",
-            press: () {},
-          ),
-          DrawerListTile(
-            title: "Documents",
-            svgSrc: "assets/icons/menu_doc.svg",
-            press: () {},
-          ),
-          DrawerListTile(
-            title: "Store",
-            svgSrc: "assets/icons/menu_store.svg",
-            press: () {},
-          ),
-          DrawerListTile(
-            title: "Notification",
-            svgSrc: "assets/icons/menu_notification.svg",
-            press: () {},
-          ),
-          DrawerListTile(
-            title: "Profile",
-            svgSrc: "assets/icons/menu_profile.svg",
-            press: () {},
-          ),
-          DrawerListTile(
-            title: "Settings",
-            svgSrc: "assets/icons/menu_setting.svg",
-            press: () {},
-          ),
+            press: () { _pageChanged.call(2); },
+          )
         ],
       ),
     );
