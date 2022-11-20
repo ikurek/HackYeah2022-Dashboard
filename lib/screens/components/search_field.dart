@@ -10,6 +10,7 @@ import '../../models/HarmFilter.dart';
 
 class SearchField extends StatelessWidget {
   final ValueChanged<String> _valueChanged;
+  final Function _onSearchClick;
   final DateRangePickerSelectionChangedCallback _dateChanged;
   final String? _dateRange;
   final EngineFilter _selectedEngineFilter;
@@ -20,6 +21,7 @@ class SearchField extends StatelessWidget {
   final ValueChanged<bool> _searchInOtherLanguagesChanged;
 
   SearchField(this._valueChanged,
+      this._onSearchClick,
       this._dateChanged,
       this._dateRange,
       this._selectedEngineFilter,
@@ -55,7 +57,7 @@ class SearchField extends StatelessWidget {
               borderRadius: const BorderRadius.all(Radius.circular(0)),
             ),
             suffixIcon: InkWell(
-              onTap: () {},
+              onTap: () => _onSearchClick(),
               child: Container(
                 padding: EdgeInsets.all(defaultPadding * 0.75),
                 margin: EdgeInsets.symmetric(horizontal: defaultPadding / 2),
@@ -170,7 +172,7 @@ class SearchField extends StatelessWidget {
                 ))
                 .toList(),
             onChanged: (value) {
-              _engineFilterChanged.call(value as EngineFilter);
+              _engineFilterChanged.call(value.toString().toEngineFilter());
               //Do something when changing the item if you want.
             }));
   }
@@ -228,7 +230,7 @@ class SearchField extends StatelessWidget {
                 ))
                 .toList(),
             onChanged: (value) {
-              _harmFilterChanged.call(value as HarmFilter);
+              _harmFilterChanged.call(value.toString().toHarmFilter());
               //Do something when changing the item if you want.
             }));
   }

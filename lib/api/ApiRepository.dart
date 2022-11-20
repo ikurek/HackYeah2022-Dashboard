@@ -12,7 +12,7 @@ class ApiRepository {
   static Dio dio = Dio(BaseOptions(baseUrl: "http://local.domain.com:5000/"));
 
   static setup() {
-    dio.interceptors.add(PrettyDioLogger());
+    dio.interceptors.add(PrettyDioLogger(responseBody: false));
   }
 
   static Future<List<Post>> getPosts(

@@ -22,7 +22,12 @@ class _DashboardScreenState extends State<DashboardScreen> {
   String _searchQuery = '';
   DateTime? _toDate = null;
   DateTime? _fromDate = null;
-  List<Post> _posts = List.empty();
+  EngineFilter _selectedEngineFilter = EngineFilter.SMART;
+  HarmFilter _selectedHarmFilter = HarmFilter.NONE;
+  bool _searchInOtherLanguages = false;
+  List<Post> _allPosts = List.empty();
+  List<Post> _visiblePosts = List.empty();
+
 
   @override
   void initState() {
@@ -31,10 +36,28 @@ class _DashboardScreenState extends State<DashboardScreen> {
   }
 
   void fetchPosts() async {
-    List<Post> search =
-        await ApiRepository.searchPosts(from: _fromDate, to: _toDate);
+    List<Post> search = await ApiRepository.searchPosts(
+        smartSearchQuery:
+        _selectedEngineFilter == EngineFilter.SMART ? _searchQuery : '',
+        keyword:
+        _selectedEngineFilter == EngineFilter.KEY_WORD ? _searchQuery : '',
+        authorUsername:
+        _selectedEngineFilter == EngineFilter.AUTHOR ? _searchQuery : '',
+        from: _fromDate,
+        to: _toDate
+    );
+
+    List<Post> filteredPosts = _allPosts.where((post) =>
+    post.fraudScore! >= _selectedHarmFilter.rangeStart() &&
+        post.fraudScore! <= _selectedHarmFilter.rangeEnd()).toList();
+
+    if (_selectedEngineFilter != EngineFilter.SMART) {
+      filteredPosts.sort((a, b) => b.fraudScore!.compareTo(a.fraudScore!));
+    }
+
     setState(() {
-      _posts = search;
+      _allPosts = search;
+      _visiblePosts = filteredPosts;
     });
   }
 
@@ -42,15 +65,15 @@ class _DashboardScreenState extends State<DashboardScreen> {
   Widget build(BuildContext context) {
     return SafeArea(
         child: Container(
-      padding: EdgeInsets.all(defaultPadding),
-      child: Column(
-        children: [
-          _getHeader(context),
-          SizedBox(height: defaultPadding),
-          _getContent(context)
-        ],
-      ),
-    ));
+          padding: EdgeInsets.all(defaultPadding),
+          child: Column(
+            children: [
+              _getHeader(context),
+              SizedBox(height: defaultPadding),
+              _getContent(context)
+            ],
+          ),
+        ));
   }
 
   Widget _getHeader(BuildContext context) {
@@ -60,7 +83,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
           IconButton(
             icon: Icon(Icons.menu),
             color: textColor,
-            onPressed: context.read<MenuController>().controlMenu,
+            onPressed: context
+                .read<MenuController>()
+                .controlMenu,
           ),
         if (!Responsive.isMobile(context))
           Spacer(flex: Responsive.isDesktop(context) ? 2 : 1),
@@ -78,7 +103,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
               color: secondaryColor,
             ),
             child:
-                Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+            Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
               Container(
                   padding: EdgeInsets.all(20),
                   child: Text(
@@ -86,17 +111,27 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     style: boldTextStyle.copyWith(fontSize: 30),
                   )),
               SearchField(
-                  (value) => onSearchChanged(value),
-                  (value) => onDateRangePickerSelectionChanged(value),
-                  null,
-                  EngineFilter.SMART,
-                  (value) {},
-                  HarmFilter.NONE,
-                  (value) {},
-                  true,
-                  (value) {}),
-              PostsTable(posts: _posts)
+                      (value) => onSearchChanged(value),
+                      () => onSearchClick(),
+                      (value) => onDateRangePickerSelectionChanged(value),
+                  formatDateRange(),
+                  _selectedEngineFilter,
+                      (value) => onEngineFilterChanged(value),
+                  _selectedHarmFilter,
+                      (value) => onHarmFilterChanged(value),
+                  _searchInOtherLanguages,
+                      (value) => onSearchInOtherLanguagesChanged(value)),
+              PostsTable(posts: _visiblePosts)
             ])));
+  }
+
+  String? formatDateRange() {
+    if (_fromDate != null && _toDate != null) {
+      return "${_fromDate!.day}.${_fromDate!.month}.${_fromDate!
+          .year} - ${_toDate!.day}.${_toDate!.month}.${_toDate!.year}";
+    } else {
+      return null;
+    }
   }
 
   void onSearchChanged(String value) {
@@ -105,13 +140,40 @@ class _DashboardScreenState extends State<DashboardScreen> {
     });
   }
 
+  void onSearchClick() {
+    print("Search click");
+    fetchPosts();
+  }
+
   void onDateRangePickerSelectionChanged(
       DateRangePickerSelectionChangedArgs value) {
-    if (value is List<DateTime>) {
-      setState(() {
-        _fromDate = (value as List<DateTime>).first;
-        _toDate = (value as List<DateTime>).last;
-      });
-    }
+    setState(() {
+      _fromDate = (value.value as PickerDateRange).startDate;
+      _toDate = (value.value as PickerDateRange).endDate;
+    });
+    fetchPosts();
+  }
+
+  void onEngineFilterChanged(EngineFilter value) {
+    print("Setting engine ${value}");
+    setState(() {
+      _selectedEngineFilter = value;
+    });
+    fetchPosts();
+  }
+
+  void onHarmFilterChanged(HarmFilter value) {
+    print("Setting filter ${value}");
+    setState(() {
+      _selectedHarmFilter = value;
+    });
+    fetchPosts();
+  }
+
+  void onSearchInOtherLanguagesChanged(bool value) {
+    setState(() {
+      _searchInOtherLanguages = value;
+    });
+    fetchPosts();
   }
 }
