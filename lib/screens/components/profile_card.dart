@@ -31,7 +31,7 @@ class ProfileCard extends StatelessWidget {
             Padding(
               padding:
               const EdgeInsets.symmetric(horizontal: defaultPadding / 2),
-              child: Text("Angelina Jolie", style: defaultTextStyle),
+              child: Text("Hanna Świerkowska", style: defaultTextStyle),
             ),
           Icon(Icons.keyboard_arrow_down),
         ],

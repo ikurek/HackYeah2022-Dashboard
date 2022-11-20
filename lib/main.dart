@@ -17,7 +17,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Flutter Admin Panel',
+      title: 'Scam IndentiUKNFier',
       theme: ThemeData(fontFamily: 'Calibri').copyWith(
         scaffoldBackgroundColor: bgColor,
         canvasColor: secondaryColor,
