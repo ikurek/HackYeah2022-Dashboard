@@ -11,8 +11,7 @@ class RecentFiles extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      width: double.infinity,
+    return Flexible(
       child: DataTable2(
         columnSpacing: 1,
         minWidth: 700,
