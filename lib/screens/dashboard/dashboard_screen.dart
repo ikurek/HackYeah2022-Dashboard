@@ -1,4 +1,5 @@
 import 'package:admin/api/ApiRepository.dart';
+import 'package:admin/models/HarmFilter.dart';
 import 'package:admin/models/Post.dart';
 import 'package:admin/responsive.dart';
 import 'package:admin/screens/components/search_field.dart';
@@ -7,6 +8,7 @@ import 'package:provider/provider.dart';
 
 import '../../constants.dart';
 import '../../controllers/MenuController.dart';
+import '../../models/EngineFilter.dart';
 import '../components/profile_card.dart';
 import '../components/recent_files.dart';
 
@@ -78,8 +80,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     "Szukaj wśród twitów",
                     style: boldTextStyle.copyWith(fontSize: 30),
                   )),
-              SearchField(
-                  (value) {}, (dateRangePickerSelectionChangedArgs) {}, null),
+              SearchField((value) {}, (dateRangePickerSelectionChangedArgs) {},
+                  null, EngineFilter.SMART, (value) {}, HarmFilter.NONE, (value) {}, true, (value) {}),
               RecentFiles()
             ])));
   }
