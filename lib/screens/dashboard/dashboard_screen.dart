@@ -1,3 +1,5 @@
+import 'package:admin/api/ApiRepository.dart';
+import 'package:admin/models/Post.dart';
 import 'package:admin/responsive.dart';
 import 'package:admin/screens/components/search_field.dart';
 import 'package:flutter/material.dart';
@@ -14,6 +16,21 @@ class DashboardScreen extends StatefulWidget {
 }
 
 class _DashboardScreenState extends State<DashboardScreen> {
+  @override
+  void initState() {
+    super.initState();
+    test();
+  }
+
+  void test() async {
+    List<Post> posts = await ApiRepository.getPosts();
+    print(posts);
+    Post post = await ApiRepository.getPost(1);
+    print(post);
+    List<Post> search = await ApiRepository.searchPosts();
+    print(search);
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(

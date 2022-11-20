@@ -1,3 +1,4 @@
+import 'package:admin/api/ApiRepository.dart';
 import 'package:admin/constants.dart';
 import 'package:admin/controllers/MenuController.dart';
 import 'package:admin/screens/main/main_screen.dart';
@@ -6,6 +7,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
 void main() {
+  ApiRepository.setup();
   runApp(MyApp());
 }
 
