@@ -1,4 +1,5 @@
 import 'package:admin/api/ApiRepository.dart';
+import 'package:admin/models/HarmFilter.dart';
 import 'package:admin/models/Post.dart';
 import 'package:admin/responsive.dart';
 import 'package:admin/screens/components/search_field.dart';
@@ -8,6 +9,7 @@ import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 
 import '../../constants.dart';
 import '../../controllers/MenuController.dart';
+import '../../models/EngineFilter.dart';
 import '../components/posts_table.dart';
 import '../components/profile_card.dart';
 
@@ -29,10 +31,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
   }
 
   void fetchPosts() async {
-    List<Post> search = await ApiRepository.searchPosts(
-      from: _fromDate,
-      to: _toDate
-    );
+    List<Post> search =
+        await ApiRepository.searchPosts(from: _fromDate, to: _toDate);
     setState(() {
       _posts = search;
     });
@@ -86,8 +86,15 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     style: boldTextStyle.copyWith(fontSize: 30),
                   )),
               SearchField(
-                      (value) => onSearchChanged(value),
-                  (value) => onDateRangePickerSelectionChanged(value), null),
+                  (value) => onSearchChanged(value),
+                  (value) => onDateRangePickerSelectionChanged(value),
+                  null,
+                  EngineFilter.SMART,
+                  (value) {},
+                  HarmFilter.NONE,
+                  (value) {},
+                  true,
+                  (value) {}),
               PostsTable(posts: _posts)
             ])));
   }
@@ -98,7 +105,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
     });
   }
 
-  void onDateRangePickerSelectionChanged(DateRangePickerSelectionChangedArgs value) {
+  void onDateRangePickerSelectionChanged(
+      DateRangePickerSelectionChangedArgs value) {
     if (value is List<DateTime>) {
       setState(() {
         _fromDate = (value as List<DateTime>).first;
