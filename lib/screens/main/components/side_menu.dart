@@ -48,7 +48,7 @@ class SideMenu extends StatelessWidget {
             color: lineColor,
           ),
           DrawerListTile(
-            title: "Glabalne metryki",
+            title: "Globalne metryki",
             svgSrc: "assets/icons/menu_task.svg",
             isSelected: _selectedPage == 2,
             press: () {

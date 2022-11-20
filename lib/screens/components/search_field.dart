@@ -50,7 +50,7 @@ class SearchField extends StatelessWidget {
         height: 65,
         child: TextField(
           decoration: InputDecoration(
-            hintText: "Search",
+            hintText: "Szukaj...",
             fillColor: secondaryColor,
             filled: true,
             border: OutlineInputBorder(
@@ -87,7 +87,7 @@ class SearchField extends StatelessWidget {
           child: Container(
             child: _dateRange == null
                 ? Text(
-              'Select a date',
+              'Filtruj datę',
               style: defaultTextStyle,
             )
                 : Text(_dateRange!,
