@@ -1,6 +1,8 @@
-import 'package:dio/dio.dart';
 import 'package:admin/models/Post.dart';
+import 'package:dio/dio.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
+
+import '../models/Finfluencer.dart';
 
 const String PARAM_SMART_SEARCH_QUERY = "smart_search_query";
 const String PARAM_KEYWORD = "keyword";
@@ -12,7 +14,7 @@ class ApiRepository {
   static Dio dio = Dio(BaseOptions(baseUrl: "http://local.domain.com:5000/"));
 
   static setup() {
-    dio.interceptors.add(PrettyDioLogger(responseBody: false));
+    dio.interceptors.add(PrettyDioLogger(responseBody: true));
   }
 
   static Future<List<Post>> getPosts(
@@ -43,5 +45,14 @@ class ApiRepository {
       PARAM_TO_DATE: (to?.toIso8601String() ?? '')
     });
     return (response.data as List).map((post) => Post.fromJson(post)).toList();
+  }
+
+  static Future<List<Finfluencer>> getFinfluencers(
+      {DateTime? from = null, DateTime? to = null}) async {
+    Response response = await dio.get("finfluencers", queryParameters: {
+      PARAM_FROM_DATE: (from?.toIso8601String() ?? ''),
+      PARAM_TO_DATE: (to?.toIso8601String() ?? '')
+    });
+    return (response.data as List).map((post) => Finfluencer.fromJson(post)).toList();
   }
 }

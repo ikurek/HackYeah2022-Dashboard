@@ -3,10 +3,14 @@ import 'package:data_table_2/data_table_2.dart';
 import 'package:flutter/material.dart';
 
 import '../../../constants.dart';
+import '../../../models/Finfluencer.dart';
 
 class FinfluencersList extends StatelessWidget {
+  final List<Finfluencer> finfluencers;
+
   const FinfluencersList({
     Key? key,
+    required this.finfluencers
   }) : super(key: key);
 
   @override
@@ -25,15 +29,12 @@ class FinfluencersList extends StatelessWidget {
               label: Text("Poziom niebezpieczeństwa społecznego",
                   style: boldTextStyle)),
         ],
-        rows: List.generate(
-          demoRecentFiles.length,
-          (index) => recentFileDataRow(demoRecentFiles[index]),
-        ),
+        rows: finfluencers.map((finfluencer) => recentFileDataRow(finfluencer)).toList(),
       ),
     );
   }
 
-  DataRow recentFileDataRow(RecentFile fileInfo) {
+  DataRow recentFileDataRow(Finfluencer finfluencer) {
     return DataRow(
       cells: [
         DataCell(
@@ -42,16 +43,16 @@ class FinfluencersList extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Expanded(child: SizedBox()),
-              Text(fileInfo.date!,
+              Text(finfluencer.tweetAuthorDisplayName!,
                   style: defaultTextStyle.copyWith(fontSize: 16)),
-              Text(fileInfo.date!,
+              Text(finfluencer.tweetAuthorUsername!,
                   style: defaultTextStyle.copyWith(fontSize: 13)),
               Expanded(child: SizedBox())
             ],
           ),
         ),
-        DataCell(ScoreBox(4)),
-        DataCell(InfluenceBox(5))
+        DataCell(ScoreBox(finfluencer.fraudScore!.round())),
+        DataCell(InfluenceBox(finfluencer.socialScore!.round()))
       ],
     );
   }
