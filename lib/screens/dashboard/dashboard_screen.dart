@@ -4,11 +4,12 @@ import 'package:admin/responsive.dart';
 import 'package:admin/screens/components/search_field.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 
 import '../../constants.dart';
 import '../../controllers/MenuController.dart';
+import '../components/posts_table.dart';
 import '../components/profile_card.dart';
-import '../components/recent_files.dart';
 
 class DashboardScreen extends StatefulWidget {
   @override
@@ -16,19 +17,25 @@ class DashboardScreen extends StatefulWidget {
 }
 
 class _DashboardScreenState extends State<DashboardScreen> {
+  String _searchQuery = '';
+  DateTime? _toDate = null;
+  DateTime? _fromDate = null;
+  List<Post> _posts = List.empty();
+
   @override
   void initState() {
     super.initState();
-    test();
+    fetchPosts();
   }
 
-  void test() async {
-    List<Post> posts = await ApiRepository.getPosts();
-    print(posts);
-    Post post = await ApiRepository.getPost(1);
-    print(post);
-    List<Post> search = await ApiRepository.searchPosts();
-    print(search);
+  void fetchPosts() async {
+    List<Post> search = await ApiRepository.searchPosts(
+      from: _fromDate,
+      to: _toDate
+    );
+    setState(() {
+      _posts = search;
+    });
   }
 
   @override
@@ -75,12 +82,28 @@ class _DashboardScreenState extends State<DashboardScreen> {
               Container(
                   padding: EdgeInsets.all(20),
                   child: Text(
-                    "Szukaj wśród twitów",
+                    "Szukaj wśród tweetów",
                     style: boldTextStyle.copyWith(fontSize: 30),
                   )),
               SearchField(
-                  (value) {}, (dateRangePickerSelectionChangedArgs) {}, null),
-              RecentFiles()
+                      (value) => onSearchChanged(value),
+                  (value) => onDateRangePickerSelectionChanged(value), null),
+              PostsTable(posts: _posts)
             ])));
+  }
+
+  void onSearchChanged(String value) {
+    setState(() {
+      _searchQuery = value;
+    });
+  }
+
+  void onDateRangePickerSelectionChanged(DateRangePickerSelectionChangedArgs value) {
+    if (value is List<DateTime>) {
+      setState(() {
+        _fromDate = (value as List<DateTime>).first;
+        _toDate = (value as List<DateTime>).last;
+      });
+    }
   }
 }

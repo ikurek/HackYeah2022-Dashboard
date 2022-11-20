@@ -3,10 +3,9 @@ import 'package:flutter/material.dart';
 
 import '../../constants.dart';
 import '../../controllers/MenuController.dart';
+import '../components/posts_table.dart';
 import '../components/profile_card.dart';
-import '../components/search_field.dart';
 import '../components/my_fields.dart';
-import '../components/recent_files.dart';
 import '../components/storage_details.dart';
 import 'package:provider/provider.dart';
 
@@ -36,7 +35,7 @@ class _MetricsScreenState extends State<MetricsScreen> {
                     children: [
                       MyFiles(),
                       SizedBox(height: defaultPadding),
-                      RecentFiles(),
+                      PostsTable(posts: [],),
                       if (Responsive.isMobile(context))
                         SizedBox(height: defaultPadding),
                       if (Responsive.isMobile(context)) StarageDetails(),

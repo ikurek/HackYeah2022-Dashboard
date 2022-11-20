@@ -3,48 +3,40 @@ import 'package:data_table_2/data_table_2.dart';
 import 'package:flutter/material.dart';
 
 import '../../../constants.dart';
+import '../../models/Post.dart';
 
-class RecentFiles extends StatelessWidget {
-  const RecentFiles({
+class PostsTable extends StatelessWidget {
+  final List<Post> posts;
+
+  const PostsTable({
     Key? key,
-  }) : super(key: key);
+    required List<Post> posts
+  }) : posts = posts, super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Flexible(
       child: DataTable2(
-        columnSpacing: 1,
-        minWidth: 700,
+        columnSpacing: 50,
+        minWidth: 500,
+        dataRowHeight: 100,
         columns: [
-          DataColumn2(
-              label: Text("Konto", style: boldTextStyle), size: ColumnSize.M),
-          DataColumn(
-            label: Text("Teść", style: boldTextStyle),
-          ),
-          DataColumn(
-            label: Text("Data postu", style: boldTextStyle),
-          ),
-          DataColumn2(
-              label: Text("Ocena", style: boldTextStyle), size: ColumnSize.S),
-          DataColumn(
-            label: Text("Retweety", style: boldTextStyle),
-          ),
-          DataColumn2(
-              label: Text("Wpływ", style: boldTextStyle), size: ColumnSize.S),
-          DataColumn(
-            label: Text("Weryfikacja", style: boldTextStyle),
+          DataColumn2(label: Text("Konto", style: boldTextStyle), size: ColumnSize.S),
+          DataColumn2(label: Text("Teść", style: boldTextStyle), fixedWidth: 500),
+          DataColumn2(label: Text("Data postu", style: boldTextStyle), size: ColumnSize.S),
+          DataColumn2(label: Text("Ocena", style: boldTextStyle), size: ColumnSize.S),
+          DataColumn2(label: Text("Retweety", style: boldTextStyle), size: ColumnSize.S),
+          DataColumn2(label: Text("Wpływ", style: boldTextStyle), size: ColumnSize.S),
+          DataColumn2(label: Text("Weryfikacja", style: boldTextStyle), size: ColumnSize.S,
           ),
         ],
-        rows: List.generate(
-          demoRecentFiles.length,
-          (index) => recentFileDataRow(demoRecentFiles[index]),
-        ),
+        rows: posts.map((post) => recentFileDataRow(post)).toList()
       ),
     );
   }
 }
 
-DataRow recentFileDataRow(RecentFile fileInfo) {
+DataRow recentFileDataRow(Post post) {
   return DataRow(
     cells: [
       DataCell(
@@ -53,29 +45,29 @@ DataRow recentFileDataRow(RecentFile fileInfo) {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Expanded(child: SizedBox()),
-            Text(fileInfo.date!,
+            Text(post.tweetAuthorDisplayName!,
                 style: defaultTextStyle.copyWith(fontSize: 16)),
-            Text(fileInfo.date!,
+            Text(post.tweetAuthorUsername!,
                 style: defaultTextStyle.copyWith(fontSize: 13)),
             Expanded(child: SizedBox())
           ],
         ),
       ),
-      DataCell(Text(fileInfo.date!, style: defaultTextStyle)),
+      DataCell(Text(post.tweetText!, style: defaultTextStyle)),
       DataCell(Row(children: [
-        Text(fileInfo.size!, style: defaultTextStyle),
+        Text(post.time(), style: defaultTextStyle),
         SizedBox(width: 5),
-        Text(fileInfo.size!,
+        Text(post.date(),
             style: defaultTextStyle.copyWith(fontWeight: FontWeight.w700))
       ])),
-      DataCell(ScoreBox(4)),
+      DataCell(ScoreBox(post.fraudScore ?? 0)),
       DataCell(Text(
-        fileInfo.date!,
+        post.retweets.toString(),
         style: defaultTextStyle,
         textAlign: TextAlign.end,
       )),
-      DataCell(InfluenceBox(5)),
-      DataCell(VerifyBox(null))
+      DataCell(InfluenceBox(post.socialScore ?? 0)),
+      DataCell(VerifyBox(post.manuallyReviewed))
     ],
   );
 }

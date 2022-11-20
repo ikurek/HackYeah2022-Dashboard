@@ -3,12 +3,14 @@ class Post {
   int? id;
   int? socialScore;
   String? tweetAuthorDisplayName;
-  String? tweetAuthorId;
+  int? tweetAuthorId;
   bool? tweetAuthorIsVerified;
   String? tweetAuthorUsername;
-  String? tweetDate;
-  String? tweetId;
+  DateTime? tweetDate;
+  int? tweetId;
+  int? retweets;
   String? tweetText;
+  bool? manuallyReviewed;
 
   Post(
       {this.fraudScore,
@@ -20,7 +22,15 @@ class Post {
         this.tweetAuthorUsername,
         this.tweetDate,
         this.tweetId,
-        this.tweetText});
+        this.retweets,
+        this.tweetText,
+        this.manuallyReviewed
+      });
+
+  String time() => "${tweetDate!.hour}:${tweetDate!.minute}:${tweetDate!.second}";
+
+  String date() => "${tweetDate!.day}.${tweetDate!.month}.${tweetDate!.year}";
+
 
   Post.fromJson(Map<String, dynamic> json) {
     fraudScore = json['fraud_score'];
@@ -30,9 +40,11 @@ class Post {
     tweetAuthorId = json['tweet_author_id'];
     tweetAuthorIsVerified = json['tweet_author_is_verified'];
     tweetAuthorUsername = json['tweet_author_username'];
-    tweetDate = json['tweet_date'];
+    tweetDate = DateTime.tryParse(json['tweet_date']);
     tweetId = json['tweet_id'];
+    retweets = json['tweet_retweet_count'];
     tweetText = json['tweet_text'];
+    manuallyReviewed = json['manually_reviewed'];
   }
 
   Map<String, dynamic> toJson() {
@@ -46,7 +58,9 @@ class Post {
     data['tweet_author_username'] = this.tweetAuthorUsername;
     data['tweet_date'] = this.tweetDate;
     data['tweet_id'] = this.tweetId;
+    data['tweet_retweet_count'] = this.retweets;
     data['tweet_text'] = this.tweetText;
+    data['manually_reviewed'] = this.manuallyReviewed;
     return data;
   }
 }
