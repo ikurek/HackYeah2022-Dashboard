@@ -1,3 +1,4 @@
+import 'package:admin/models/FinfluencersDateFilter.dart';
 import 'package:admin/responsive.dart';
 import 'package:flutter/material.dart';
 
@@ -10,6 +11,9 @@ import '../components/recent_files.dart';
 import '../components/storage_details.dart';
 import 'package:provider/provider.dart';
 
+import 'components/fifnluencers_list.dart';
+import 'components/finfluencers_search_filter_list.dart';
+
 
 class FinfluencersScreen extends StatefulWidget {
   @override
@@ -17,46 +21,23 @@ class FinfluencersScreen extends StatefulWidget {
 }
 
 class _FinfluencersScreenState extends State<FinfluencersScreen> {
+  FinfluencersDateFilter _finfluencersDateFilter = FinfluencersDateFilter
+      .ONE_DAY;
+
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-      child: SingleChildScrollView(
-        primary: false,
-        padding: EdgeInsets.all(defaultPadding),
-        child: Column(
-          children: [
-            _getHeader(context),
-            SizedBox(height: defaultPadding),
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Expanded(
-                  flex: 5,
-                  child: Column(
-                    children: [
-                      MyFiles(),
-                      SizedBox(height: defaultPadding),
-                      RecentFiles(),
-                      if (Responsive.isMobile(context))
-                        SizedBox(height: defaultPadding),
-                      if (Responsive.isMobile(context)) StarageDetails(),
-                    ],
-                  ),
-                ),
-                if (!Responsive.isMobile(context))
-                  SizedBox(width: defaultPadding),
-                // On Mobile means if the screen is less than 850 we dont want to show it
-                if (!Responsive.isMobile(context))
-                  Expanded(
-                    flex: 2,
-                    child: StarageDetails(),
-                  ),
-              ],
-            )
-          ],
-        ),
-      ),
-    );
+        child: Container(
+          padding: EdgeInsets.all(defaultPadding),
+          child: Column(
+            children: [
+              _getHeader(context),
+              SizedBox(height: defaultPadding),
+              _getContent(context)
+            ],
+          ),
+        ));
   }
 
   Widget _getHeader(BuildContext context) {
@@ -66,12 +47,9 @@ class _FinfluencersScreenState extends State<FinfluencersScreen> {
           IconButton(
             icon: Icon(Icons.menu),
             color: textColor,
-            onPressed: context.read<MenuController>().controlMenu,
-          ),
-        if (!Responsive.isMobile(context))
-          Text(
-            "Finfluencers",
-            style: Theme.of(context).textTheme.headline6,
+            onPressed: context
+                .read<MenuController>()
+                .controlMenu,
           ),
         if (!Responsive.isMobile(context))
           Spacer(flex: Responsive.isDesktop(context) ? 2 : 1),
@@ -79,5 +57,41 @@ class _FinfluencersScreenState extends State<FinfluencersScreen> {
         ProfileCard()
       ],
     );
+  }
+
+  Widget _getContent(BuildContext context) {
+    return Flexible(
+        child: Container(
+            padding: EdgeInsets.all(defaultPadding),
+            decoration: BoxDecoration(
+              color: secondaryColor,
+            ),
+            child:
+            Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+              Container(
+                  padding: EdgeInsets.only(left: 20, top: 20),
+                  child: Text(
+                    "Top finfluencerów",
+                    style: boldTextStyle.copyWith(fontSize: 30),
+                  )),
+              Container(
+                  padding: EdgeInsets.only(left: 20, top: 5, bottom: 20),
+                  child: Text(
+                    "Lista finfluencerów o najwyższym scorze niebezpieczeństwa podmiotu",
+                    style: defaultTextStyle.copyWith(fontSize: 14),
+                  )),
+              FinfluencersSearchFilterList(
+                  _finfluencersDateFilter, (value) {
+                setState(() {
+                  _finfluencersDateFilter = value;
+                });
+                _requestFinfluencers();
+              }),
+              FinfluencersList()
+            ])));
+  }
+
+  _requestFinfluencers() {
+    // Igor nakurwiaj masz wybrany state w _finfluencersDateFilter
   }
 }
